@@ -8,7 +8,7 @@ I am going to use the data of YouTube Videos obtained by YouTube Data API to bui
 
 #### Data Description:
 * Method: I will use YouTube Data API to search the list of certain categories and types of videos and get the detailed information of each video. 
-* Size: I will be able to get the data of at most 8,000 videos per day with the default quota of YouTube Data API. It will be about 56,000 data points for the first week if there no other limits
+* Size: I will be able to get the data of at most 4,000 videos per day with the default quota of YouTube Data API. It will be about 28,000 data points for the first week if there no other limits
 * Sample of features expected to work with
     * videoId: '-eU9kqXcLVM', id of the video
     * channelId: 'UCqmld-BIYME2i_ooRTo1EOg', id of the channel for getting the statistics of the channel
