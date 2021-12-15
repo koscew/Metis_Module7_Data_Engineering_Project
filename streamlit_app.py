@@ -1,7 +1,6 @@
 import streamlit as st
 import pickle
 import datetime as dt
-#import pandas as pd
 import numpy as np
 from PIL import Image
 import matplotlib.pyplot as plt
@@ -39,7 +38,7 @@ model = load_model('pickles/dl_5.h5')
 def load_parameters(path):
     with open(path, 'rb') as f:
         parameters = pickle.load(f)
-    return parameters
+        return parameters
 scaler = load_parameters('pickles/feature_scaler_1213.pkl')
 title_tokenizer = load_parameters('pickles/title_tokenizer_1213.pkl')
 tag_tokenizer = load_parameters('pickles/tag_tokenizer_1213.pkl')
