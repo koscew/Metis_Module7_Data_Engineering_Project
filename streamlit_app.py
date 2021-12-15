@@ -147,7 +147,7 @@ for time in months:
 
 st.set_option('deprecation.showPyplotGlobalUse', False)
 chart = sns.lineplot(x=months, y=predictions, marker = "o")
-chart.set(ylim = (0, max(predictions)*1.1))
+chart.set(ylim = (0, max(predictions)*1.1), xlabel = "Months", ylabel = "Prediction of Views")
 chart.set_xticks(months)
 sns.despine()
 for i, label in enumerate (predictions):
