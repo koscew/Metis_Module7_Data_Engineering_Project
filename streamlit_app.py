@@ -10,59 +10,56 @@ from tensorflow.keras.preprocessing import sequence
 import keras
 import spacy
 
-
-#nlp = spacy.load('en_core_web_sm')
+#load models
 @st.cache(allow_output_mutation=True)
 def spacy_load(model_name):
     nlp = spacy.load(model_name)
     return nlp
 nlp = spacy_load('en_core_web_sm')
 
-#with open('pickles/dl_5.h5', 'rb') as f:
-#    model = keras.models.load_model(f)
 @st.cache(allow_output_mutation=True)
 def load_model(path):
     model = keras.models.load_model(path)
     return model
-model = load_model('pickles/dl_5.h5')
+model = load_model('pickles/dl_1215_5m_100_daily.h5')
 
-#with open('pickles/feature_scaler_1213.pkl', 'rb') as f:
-#    scaler = pickle.load(f)
-#with open('pickles/title_tokenizer_1213.pkl', 'rb') as f:
-#     title_tokenizer = pickle.load(f)
-# with open('pickles/tag_tokenizer_1213.pkl', 'rb') as f:
-#     tag_tokenizer = pickle.load(f)
-# with open('pickles/des_tokenizer_1213.pkl', 'rb') as f:
-#     des_tokenizer = pickle.load(f)
 @st.cache(allow_output_mutation=True)
 def load_parameters(path):
     with open(path, 'rb') as f:
         parameters = pickle.load(f)
         return parameters
-scaler = load_parameters('pickles/feature_scaler_1213.pkl')
-title_tokenizer = load_parameters('pickles/title_tokenizer_1213.pkl')
-tag_tokenizer = load_parameters('pickles/tag_tokenizer_1213.pkl')
-des_tokenizer = load_parameters('pickles/des_tokenizer_1213.pkl')
+scaler = load_parameters('pickles/feature_scaler_1215.pkl')
+title_tokenizer = load_parameters('pickles/title_tokenizer_1215.pkl')
+tag_tokenizer = load_parameters('pickles/tag_tokenizer_1215.pkl')
+des_tokenizer = load_parameters('pickles/des_tokenizer_1215.pkl')
 
-#features = ['contentDetails.duration', 'status.madeForKids_x', 'hd','rectangular', 'video_publish_sec', 'snippet.categoryId_1', 'snippet.categoryId_10', 
-#            'snippet.categoryId_17', 'snippet.categoryId_19', 'snippet.categoryId_2', 'snippet.categoryId_20', 'snippet.categoryId_22', 'snippet.categoryId_23',
-#            'snippet.categoryId_24', 'snippet.categoryId_25', 'snippet.categoryId_26', 'snippet.categoryId_27', 'snippet.categoryId_28', 'snippet.categoryId_29', 
-#            'statistics.subscriberCount', 'statistics.videoCount', 'status.madeForKids_y', 'US', 'IN', 'GB', 'CA', 'AU', 'channel_publish_sec']
 
+#variables
+black_image = np.zeros((1,224,224,3))
 today = dt.date.today()
 categories = ['Entertainment', 'Gaming', 'Film & Animation', 'Sports', 'News & Politics', 'People & Blogs', 'Howto & Style', 'Music',
               'Autos & Vehicles', 'Education', 'Travel & Events', 'Science & Technology', 'Comedy', 'Nonprofits & Activism', 'Other']
-
-
+maxlen_title = 22
+maxlen_tag = 105
+maxlen_des = 765
 
 #sidebar
-st.sidebar.markdown('# YouTube Views Predcition System')
+st.sidebar.markdown('# YouTube Video Information Evaluation System')
 st.sidebar.markdown('## Video Information')
 st.sidebar.write('1. The duration of your video:')
-day = st.sidebar.number_input("Days", min_value = 0)
-hour = st.sidebar.number_input("Hours", min_value = 0)
-minute = st.sidebar.number_input("Minutes", min_value = 0, value = 5)
-second = st.sidebar.number_input("Seconds", min_value = 0)
+
+
+duration_cols_1 = st.sidebar.columns(2)
+duration_cols_2 = st.sidebar.columns(2)
+day = duration_cols_1[0].number_input("Days", min_value = 0)
+hour = duration_cols_1[1].number_input("Hours", min_value = 0)
+minute = duration_cols_2[0].number_input("Minutes", min_value = 0, value = 5)
+second = duration_cols_2[1].number_input("Seconds", min_value = 0)
+
+# day = st.sidebar.number_input("Days", min_value = 0)
+# hour = st.sidebar.number_input("Hours", min_value = 0)
+# minute = st.sidebar.number_input("Minutes", min_value = 0, value = 5)
+# second = st.sidebar.number_input("Seconds", min_value = 0)
 category = st.sidebar.selectbox('2. The YouTube video category associated with the video', categories)
 vidoe_kid = st.sidebar.selectbox('3. Your video contains the current "made for kids" status', ['No', 'Yes'])
 hd = st.sidebar.selectbox('4. Your video is HD or SD?', ['HD', 'SD'])
@@ -76,7 +73,7 @@ country = st.sidebar.selectbox('4. The country with which your channel is associ
 channel_kid = st.sidebar.selectbox('5. Your channel contains the current "made for kids" status', ['No', 'Yes'])
 
 #page
-st.markdown('# You can use this system to optimize your thumbnail, title, tag, and description. Please fill out the information on the sidebar first.')
+st.markdown("### You can use this system to optimize your thumbnail, title, tag, and description. Please fill out the information on the sidebar first to get better estimation.")
 title_input = st.text_input("The title of your video")
 tag_input = st.text_input("The tags of your video")
 des_input = st.text_area("The description of your video", height = 1)
@@ -85,9 +82,9 @@ img = st.file_uploader('Upload your thumbnail')
 if img != None:
     st.image(Image.open(img))
     thumbnail = Image.open(img).convert('RGB').resize((224,224))
-    thumbnail = np.array([np.array(thumbnail)/225]) #225 is typo in training, need to change to 255 if retrain
+    thumbnail = np.array([np.array(thumbnail)/255])
 else:
-    thumbnail = np.zeros((1,224,224,3))
+    thumbnail = black_image
 
 
 #features
@@ -117,6 +114,13 @@ CA = 1 if country == 'CA' else 0
 AU = 1 if country == 'AU' else 0
 channel_duration = (today - date).total_seconds()
 
+features = [duration, vidoe_kid_yes, hd_yes, rectangular_yes, categoryId_1, categoryId_10, 
+            categoryId_17, categoryId_19, categoryId_2, categoryId_20, categoryId_22, categoryId_23,
+            categoryId_24, categoryId_25, categoryId_26, categoryId_27, categoryId_28, categoryId_29, 
+            subscriber, channel_video, channel_kid_yes, US, IN, GB, CA, AU, channel_duration]
+
+test_fea = scaler.transform(np.array(features).reshape(1, -1))
+
 #nlp
 title_nlp = [w.lemma_.lower() for w in nlp(title_input) if not w.is_stop and not w.is_punct and not w.like_num]
 title = [' '.join(title_nlp)]
@@ -125,33 +129,18 @@ tag = [' '.join(tag_nlp)]
 des_nlp = [w.lemma_.lower() for w in nlp(des_input) if not w.is_stop and not w.is_punct and not w.like_num]
 des = [' '.join(des_nlp)]
 
-
 test_title = title_tokenizer.texts_to_sequences(title)
-test_title = sequence.pad_sequences(test_title, maxlen=23)
+test_title = sequence.pad_sequences(test_title, maxlen=maxlen_title)
 test_tag = tag_tokenizer.texts_to_sequences(tag)
-test_tag = sequence.pad_sequences(test_tag, maxlen=105)
+test_tag = sequence.pad_sequences(test_tag, maxlen=maxlen_tag)
 test_des = des_tokenizer.texts_to_sequences(des)
-test_des = sequence.pad_sequences(test_des, maxlen=855)
+test_des = sequence.pad_sequences(test_des, maxlen=maxlen_des)
 
 #predict
-predictions = []
-months = [1, 3, 6, 9, 12]
-for time in months:
-    features = [duration, vidoe_kid_yes, hd_yes, rectangular_yes, 60*60*24*30*time, categoryId_1, categoryId_10, 
-                categoryId_17, categoryId_19, categoryId_2, categoryId_20, categoryId_22, categoryId_23,
-                categoryId_24, categoryId_25, categoryId_26, categoryId_27, categoryId_28, categoryId_29, 
-                subscriber, channel_video, channel_kid_yes, US, IN, GB, CA, AU, channel_duration]
-    test_fea = scaler.transform(np.array(features).reshape(1, -1))
-    prediction = model.predict([thumbnail, test_fea, test_title, test_tag, test_des]) 
-    predictions.append(int(prediction[0][0]))
+baseline = model.predict([black_image, test_fea, np.zeros((1,maxlen_title)), np.zeros((1,maxlen_tag)), np.zeros((1,maxlen_des))])[0][0]
+prediction = model.predict([thumbnail, test_fea, test_title, test_tag, test_des])[0][0] 
 
-st.set_option('deprecation.showPyplotGlobalUse', False)
-chart = sns.lineplot(x=months, y=predictions, marker = "o")
-chart.set(ylim = (0, max(predictions)*1.1), xlabel = "Months", ylabel = "Prediction of Views")
-chart.set_xticks(months)
-sns.despine()
-for i, label in enumerate (predictions):
-    plt.annotate(label, (months[i]-0.5, predictions[i]))
-st.pyplot()
-
+#st.markdown(f'# {baseline}')
+#st.markdown(f'# {prediction}')
+st.markdown(f'# Improvement: {int((prediction/ baseline - 1) * 100)}%')
 
