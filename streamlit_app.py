@@ -47,15 +47,12 @@ maxlen_des = 765
 st.sidebar.markdown('# YouTube Video Information Evaluation System')
 st.sidebar.markdown('## Video Information')
 st.sidebar.write('1. The duration of your video:')
-
-
 duration_cols_1 = st.sidebar.columns(2)
 duration_cols_2 = st.sidebar.columns(2)
 day = duration_cols_1[0].number_input("Days", min_value = 0)
 hour = duration_cols_1[1].number_input("Hours", min_value = 0)
 minute = duration_cols_2[0].number_input("Minutes", min_value = 0, value = 5)
 second = duration_cols_2[1].number_input("Seconds", min_value = 0)
-
 # day = st.sidebar.number_input("Days", min_value = 0)
 # hour = st.sidebar.number_input("Hours", min_value = 0)
 # minute = st.sidebar.number_input("Minutes", min_value = 0, value = 5)
