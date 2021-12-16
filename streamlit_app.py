@@ -21,7 +21,7 @@ nlp = spacy_load('en_core_web_sm')
 def load_model(path):
     model = keras.models.load_model(path)
     return model
-model = load_model('pickles/dl_1215_5m_100_daily.h5')
+model = load_model('pickles/dl_1215_5m_100_log_daily.h5')
 
 @st.cache(allow_output_mutation=True)
 def load_parameters(path):
@@ -35,7 +35,7 @@ des_tokenizer = load_parameters('pickles/des_tokenizer_1215.pkl')
 
 
 #variables
-black_image = np.zeros((1,224,224,3))
+blank_image = np.full((1,224, 224, 3), 1)
 today = dt.date.today()
 categories = ['Entertainment', 'Gaming', 'Film & Animation', 'Sports', 'News & Politics', 'People & Blogs', 'Howto & Style', 'Music',
               'Autos & Vehicles', 'Education', 'Travel & Events', 'Science & Technology', 'Comedy', 'Nonprofits & Activism', 'Other']
@@ -81,7 +81,7 @@ if img != None:
     thumbnail = Image.open(img).convert('RGB').resize((224,224))
     thumbnail = np.array([np.array(thumbnail)/255])
 else:
-    thumbnail = black_image
+    thumbnail = blank_image
 
 
 #features
@@ -134,10 +134,13 @@ test_des = des_tokenizer.texts_to_sequences(des)
 test_des = sequence.pad_sequences(test_des, maxlen=maxlen_des)
 
 #predict
-baseline = model.predict([black_image, test_fea, np.zeros((1,maxlen_title)), np.zeros((1,maxlen_tag)), np.zeros((1,maxlen_des))])[0][0]
+baseline = model.predict([blank_image, test_fea, np.zeros((1,maxlen_title)), np.zeros((1,maxlen_tag)), np.zeros((1,maxlen_des))])[0][0]
 prediction = model.predict([thumbnail, test_fea, test_title, test_tag, test_des])[0][0] 
 
-#st.markdown(f'# {baseline}')
-#st.markdown(f'# {prediction}')
-st.markdown(f'# Improvement: {int((prediction/ baseline - 1) * 100)}%')
+#st.markdown(f'# {10 ** baseline}')
+#st.markdown(f'# {10 ** prediction}')
+#st.markdown(f'# Improvement: {int((10 ** prediction/ 10 ** baseline - 1) * 100)}%')
+st.markdown(f'# Video Information Score: {int((10 ** (prediction - baseline) - 1) * 100)} \n'
+             '## (How many percentage of views can increase when compared with blank image, title, tag and description)')
+
 
