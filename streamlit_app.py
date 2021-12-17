@@ -3,8 +3,8 @@ import pickle
 import datetime as dt
 import numpy as np
 from PIL import Image
-import matplotlib.pyplot as plt
-import seaborn as sns
+#import matplotlib.pyplot as plt
+#import seaborn as sns
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing import sequence
 import keras
@@ -141,7 +141,7 @@ prediction = model.predict([thumbnail, test_fea, test_title, test_tag, test_des]
 #st.markdown(f'# {10 ** prediction}')
 #st.markdown(f'# Improvement: {int((10 ** prediction/ 10 ** baseline - 1) * 100)}%')
 st.markdown(f'# Video Information Score: {int((10 ** (prediction - baseline) - 1) * 100)}% \n'
-             '## * The number above shows the increasing percentage of views compared to blank image, title, tag and description. '
+             '* The number above shows the increasing percentage of views compared to blank image, title, tag and description. '
              '* You can upload different thumbnails and enter different titles, tags and description to compare the scores of different combinations)')
 
 
