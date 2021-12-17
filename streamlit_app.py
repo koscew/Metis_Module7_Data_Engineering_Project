@@ -140,7 +140,8 @@ prediction = model.predict([thumbnail, test_fea, test_title, test_tag, test_des]
 #st.markdown(f'# {10 ** baseline}')
 #st.markdown(f'# {10 ** prediction}')
 #st.markdown(f'# Improvement: {int((10 ** prediction/ 10 ** baseline - 1) * 100)}%')
-st.markdown(f'# Video Information Score: {int((10 ** (prediction - baseline) - 1) * 100)} \n'
-             '## (How many percentage of views can increase when compared with blank image, title, tag and description)')
+st.markdown(f'# Video Information Score: {int((10 ** (prediction - baseline) - 1) * 100)}% \n'
+             '## * The number above shows the increasing percentage of views compared to blank image, title, tag and description. '
+             '* You can upload different thumbnails and enter different titles, tags and description to compare the scores of different combinations)')
 
 
