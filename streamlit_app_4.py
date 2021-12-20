@@ -91,10 +91,12 @@ else:
     thumbnail_a = blank_image
 
 need_b = st.selectbox('Would you like to enter inputs of Example B to compare?', [
-    'Yes, I would like to enter the inputs of Example B', 
-    'No, I would like to compare Example A with blank inputs'])
+    'No, I would like to compare Example A with blank inputs',
+    'Yes, I would like to enter the inputs of Example B'
+])
 
 #page_B
+img_b == None
 if need_b == 'Yes':
     st.markdown("### ***Your Example B***")
     title_input_b = st.text_input("The title of Example B")
