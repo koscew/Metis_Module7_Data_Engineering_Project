@@ -106,6 +106,7 @@ else:
     title_input_b = ""
     tag_input_b = ""
     des_input_b = ""
+    img_b = None
 
 if img_b != None:
     #st.image(Image.open(img_b))
