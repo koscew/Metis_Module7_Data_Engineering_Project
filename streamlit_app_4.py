@@ -90,13 +90,12 @@ if img_a != None:
 else:
     thumbnail_a = blank_image
 
-need_b = st.selectbox('Would you like to enter inputs of Example B to compare?', [
-    'No, I would like to compare Example A with blank inputs',
-    'Yes, I would like to enter the inputs of Example B'
-])
+need_b_no = 'No, I would like to compare Example A with blank inputs'
+need_b_yes = 'Yes, I would like to enter the inputs of Example B'
+need_b = st.selectbox('Would you like to enter inputs of Example B to compare?', [need_b_no, need_b_yes])
 
 #page_B
-if need_b == 'Yes, I would like to enter the inputs of Example B':
+if need_b == need_b_yes:
     st.markdown("### ***Your Example B***")
     title_input_b = st.text_input("The title of Example B")
     tag_input_b = st.text_input("The tags of Example B")
@@ -182,7 +181,7 @@ test_des_b = sequence.pad_sequences(test_des_b, maxlen=maxlen_des)
 
 
 #show table
-if need_b == 'Yes':
+if need_b == need_b_yes:
     df = pd.DataFrame(columns=['Example A', 'Example B'], 
                       index=['Title', 'Tag', 'Description'])
     df.loc['Title'] = [title_input_a, title_input_b]
@@ -209,7 +208,6 @@ prediction_b = model.predict([thumbnail_b, test_fea, test_title_b, test_tag_b, t
 #st.markdown(f'# Improvement: {int((10 ** prediction/ 10 ** baseline - 1) * 100)}%')
 
 if need_b == 'Yes':
-
     if prediction_a > prediction_b: 
         st.markdown(f'# ***Example A*** is {int((10 ** (prediction_a - prediction_b) - 1) * 100)}% better than ***Example B***')
     elif prediction_a < prediction_b: 
