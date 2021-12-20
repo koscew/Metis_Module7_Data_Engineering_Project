@@ -75,7 +75,7 @@ st.markdown("## You can use this system to optimize your thumbnail, title, tag, 
             "1. You can fill out the information on the sidebar first to get better estimation. \n"
             "2. Enter the title, tags and description and upload the thumbnail of your video into ***Example A*** \n"
             "3. Enter the title, tags and description and upload the thumbnail of your video into ***Example B*** "
-            "or leave the inputs of ***Example B*** blank to compare ***Example A*** with blank inputs \n"
+            "or choose to compare ***Example A*** with blank inputs \n"
             "4. Scroll down to see the comparison result")
 st.markdown("### ***Your Example A***")
 title_input_a = st.text_input("The title of Example A")
@@ -90,12 +90,16 @@ if img_a != None:
 else:
     thumbnail_a = blank_image
 
+need_b = st.selectbox('Would you like to enter inputs of Example B to compare?', [
+    'Yes', 'No, I would like to compare Example A with blank inputs'])
+
 #page_B
-st.markdown("### ***Your Example B***")
-title_input_b = st.text_input("The title of Example B")
-tag_input_b = st.text_input("The tags of Example B")
-des_input_b = st.text_area("The description of Example B", height = 1)
-img_b = st.file_uploader('Upload the thumbnail of Example B')
+if need == 'Yes':
+    st.markdown("### ***Your Example B***")
+    title_input_b = st.text_input("The title of Example B")
+    tag_input_b = st.text_input("The tags of Example B")
+    des_input_b = st.text_area("The description of Example B", height = 1)
+    img_b = st.file_uploader('Upload the thumbnail of Example B')
 
 if img_b != None:
     #st.image(Image.open(img_b))
@@ -171,23 +175,22 @@ test_des_b = sequence.pad_sequences(test_des_b, maxlen=maxlen_des)
 
 
 #show table
-df = pd.DataFrame(columns=['Example A', 'Example B'], 
-                  index=['Title', 'Tag', 'Description'])
-df.loc['Title'] = [title_input_a, title_input_b]
-df.loc['Tag'] = [tag_input_a, tag_input_b]
-df.loc['Description'] = [des_input_a, des_input_b]
+if need_b == 'Yes':
+    df = pd.DataFrame(columns=['Example A', 'Example B'], 
+                      index=['Title', 'Tag', 'Description'])
+    df.loc['Title'] = [title_input_a, title_input_b]
+    df.loc['Tag'] = [tag_input_a, tag_input_b]
+    df.loc['Description'] = [des_input_a, des_input_b]
 
-st.markdown("## Comparison")
-st.table(df)
-image_a, image_b = st.columns(2)
-with image_a:
-    st.markdown('### Thumbnail A')
-    st.image(thumbnail_a)
-with image_b:
-    st.markdown('### Thumbnail B')
-    st.image(thumbnail_b)
-
-
+    st.markdown("## Comparison")
+    st.table(df)
+    image_a, image_b = st.columns(2)
+    with image_a:
+        st.markdown('### Thumbnail A')
+        st.image(thumbnail_a)
+    with image_b:
+        st.markdown('### Thumbnail B')
+        st.image(thumbnail_b)
 
 #predict
 #baseline = model.predict([blank_image, test_fea, np.zeros((1,maxlen_title)), np.zeros((1,maxlen_tag)), np.zeros((1,maxlen_des))])[0][0]
@@ -197,13 +200,20 @@ prediction_b = model.predict([thumbnail_b, test_fea, test_title_b, test_tag_b, t
 #st.markdown(f'# {10 ** baseline}')
 #st.markdown(f'# {10 ** prediction}')
 #st.markdown(f'# Improvement: {int((10 ** prediction/ 10 ** baseline - 1) * 100)}%')
-if prediction_a > prediction_b: 
-    st.markdown(f'# ***Example A*** is {int((10 ** (prediction_a - prediction_b) - 1) * 100)}% better than ***Example B***')
-elif prediction_a < prediction_b: 
-    st.markdown(f'# ***Example B*** is {int((10 ** (prediction_b - prediction_a) - 1) * 100)}% better than ***Example A***')
-else:
-    st.markdown('# ***Example A*** is as good as ***Example B***')
 
-st.markdown('* The number above shows the increasing percentage of views when comparing ***Example A*** with ***Example B***.\n'
-            '* You can upload different thumbnails and enter different titles, tags and description to compare the scores of different combinations.')
+if need_b == 'Yes':
 
+    if prediction_a > prediction_b: 
+        st.markdown(f'# ***Example A*** is {int((10 ** (prediction_a - prediction_b) - 1) * 100)}% better than ***Example B***')
+    elif prediction_a < prediction_b: 
+        st.markdown(f'# ***Example B*** is {int((10 ** (prediction_b - prediction_a) - 1) * 100)}% better than ***Example A***')
+    else:
+        st.markdown('# ***Example A*** is as good as ***Example B***')
+
+
+    st.markdown('* The number above shows the increasing percentage of views when comparing ***Example A*** with ***Example B***.\n'
+                '* You can upload different thumbnails and enter different titles, tags and description to compare the scores of different combinations.')
+else: 
+    st.markdown(f'# Video Improvement Rate: {int((10 ** (prediction_a - prediction_b) - 1) * 100)}% \n'
+                 '* The number above shows the increasing percentage of views compared to blank image, title, tag and description.\n'
+                 '* You can upload different thumbnails and enter different titles, tags and description to compare the scores of different combinations.')
