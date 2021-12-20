@@ -207,7 +207,7 @@ prediction_b = model.predict([thumbnail_b, test_fea, test_title_b, test_tag_b, t
 #st.markdown(f'# {10 ** prediction}')
 #st.markdown(f'# Improvement: {int((10 ** prediction/ 10 ** baseline - 1) * 100)}%')
 
-if need_b == 'Yes':
+if need_b == need_b_yes:
     if prediction_a > prediction_b: 
         st.markdown(f'# ***Example A*** is {int((10 ** (prediction_a - prediction_b) - 1) * 100)}% better than ***Example B***')
     elif prediction_a < prediction_b: 
