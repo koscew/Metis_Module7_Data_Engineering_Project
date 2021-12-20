@@ -74,7 +74,7 @@ channel_kid = st.sidebar.selectbox('5. Your channel contains the current "made f
 st.markdown("## You can use this system to optimize your thumbnail, title, tag, and description. \n"
             "1. You can fill out the information on the sidebar first to get better estimation. \n"
             "2. Enter the title, tags and description and upload the thumbnail of your video into ***Example A*** \n"
-            "3. You can choose to either: \n"
+            "3. You can choose either to: \n"
             "    1. Compare ***Example A*** with ***Example B***: Enter the title, tags and description and upload the thumbnail of your video into ***Example B***\n"
             "    2. Compare ***Example A*** with blank inputs \n"
             "4. Scroll down to see the comparison result")
@@ -93,7 +93,7 @@ else:
 
 need_b_no = 'No, I would like to compare Example A with blank inputs'
 need_b_yes = 'Yes, I would like to enter the inputs of Example B'
-need_b = st.selectbox('Would you like to enter inputs of Example B to compare?', [need_b_no, need_b_yes])
+need_b = st.selectbox('*Would you like to enter inputs of Example B to compare?', [need_b_no, need_b_yes])
 
 #page_B
 if need_b == need_b_yes:
