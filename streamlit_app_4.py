@@ -91,7 +91,8 @@ else:
     thumbnail_a = blank_image
 
 need_b = st.selectbox('Would you like to enter inputs of Example B to compare?', [
-    'Yes', 'No, I would like to compare Example A with blank inputs'])
+    'Yes, I would like to enter the inputs of Example B', 
+    'No, I would like to compare Example A with blank inputs'])
 
 #page_B
 if need_b == 'Yes':
