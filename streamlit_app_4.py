@@ -96,7 +96,7 @@ need_b = st.selectbox('Would you like to enter inputs of Example B to compare?',
 ])
 
 #page_B
-img_b == None
+img_b = 'None'
 if need_b == 'Yes':
     st.markdown("### ***Your Example B***")
     title_input_b = st.text_input("The title of Example B")
@@ -104,7 +104,7 @@ if need_b == 'Yes':
     des_input_b = st.text_area("The description of Example B", height = 1)
     img_b = st.file_uploader('Upload the thumbnail of Example B')
 
-if img_b != None:
+if img_b != 'None':
     #st.image(Image.open(img_b))
     thumbnail_b = Image.open(img_b).convert('RGB').resize((224,224))
     thumbnail_b = np.array([np.array(thumbnail_b)/255])
