@@ -96,13 +96,17 @@ need_b = st.selectbox('Would you like to enter inputs of Example B to compare?',
 ])
 
 #page_B
-img_b = 'None'
-if need_b == 'Yes':
+if need_b == 'Yes, I would like to enter the inputs of Example B':
     st.markdown("### ***Your Example B***")
     title_input_b = st.text_input("The title of Example B")
     tag_input_b = st.text_input("The tags of Example B")
     des_input_b = st.text_area("The description of Example B", height = 1)
     img_b = st.file_uploader('Upload the thumbnail of Example B')
+else:
+    title_input_b = ""
+    tag_input_b = ""
+    des_input_b = ""
+    img_b = 'None'
 
 if img_b != 'None':
     #st.image(Image.open(img_b))
