@@ -202,7 +202,7 @@ if need_b == need_b_yes:
         st.markdown('### Thumbnail B')
         st.image(thumbnail_b)
 elif img_a != None:
-    st.image(thumbnail_a)
+    st.image(img_a)
 
 #predict
 #baseline = model.predict([blank_image, test_fea, np.zeros((1,maxlen_title)), np.zeros((1,maxlen_tag)), np.zeros((1,maxlen_des))])[0][0]
