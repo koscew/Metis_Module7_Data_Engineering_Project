@@ -93,7 +93,10 @@ else:
 
 need_b_no = 'No, I would like to compare Example A with blank inputs'
 need_b_yes = 'Yes, I would like to enter the inputs of Example B'
-need_b = st.selectbox('*Would you like to enter inputs of Example B to compare?', [need_b_no, need_b_yes])
+need_b = st.selectbox(
+    '*Would you like to enter inputs of Example B to compare Example A with Example B?',
+    [need_b_no, need_b_yes]
+)
 
 #page_B
 if need_b == need_b_yes:
@@ -198,6 +201,8 @@ if need_b == need_b_yes:
     with image_b:
         st.markdown('### Thumbnail B')
         st.image(thumbnail_b)
+elif img_a != None::
+    st.image(thumbnail_a)
 
 #predict
 #baseline = model.predict([blank_image, test_fea, np.zeros((1,maxlen_title)), np.zeros((1,maxlen_tag)), np.zeros((1,maxlen_des))])[0][0]
