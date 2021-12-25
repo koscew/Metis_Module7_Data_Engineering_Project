@@ -201,7 +201,7 @@ if need_b == need_b_yes:
     with image_b:
         st.markdown('### Thumbnail B')
         st.image(thumbnail_b)
-elif img_a != None::
+elif img_a != None:
     st.image(thumbnail_a)
 
 #predict
