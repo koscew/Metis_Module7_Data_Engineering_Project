@@ -228,3 +228,6 @@ else:
     st.markdown(f'# Video Improvement Rate: {int((10 ** (prediction_a - prediction_b) - 1) * 100)}% \n'
                  '* The number above shows the increasing percentage of views compared to blank image, title, tag and description.\n'
                  '* You can upload different thumbnails and enter different titles, tags and description to compare the scores of different combinations.')
+
+if __name__ == "__main__":
+    main()
