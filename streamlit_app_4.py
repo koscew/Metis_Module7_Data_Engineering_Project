@@ -16,13 +16,11 @@ import spacy
 def spacy_load(model_name):
     nlp = spacy.load(model_name)
     return nlp
-nlp = spacy_load('en_core_web_sm')
 
 @st.cache(allow_output_mutation=True)
 def load_model(path):
     model = keras.models.load_model(path)
     return model
-model = load_model('pickles/dl_1215_5m_100_log_daily.h5')
 
 @st.cache(allow_output_mutation=True)
 def load_parameters(path):
@@ -31,6 +29,9 @@ def load_parameters(path):
         return parameters
 
 def main():
+    #load
+    nlp = spacy_load('en_core_web_sm') 
+    model = load_model('pickles/dl_1215_5m_100_log_daily.h5')
     scaler = load_parameters('pickles/feature_scaler_1215.pkl')
     title_tokenizer = load_parameters('pickles/title_tokenizer_1215.pkl')
     tag_tokenizer = load_parameters('pickles/tag_tokenizer_1215.pkl')
