@@ -30,7 +30,7 @@ def load_parameters(path):
         parameters = pickle.load(f)
         return parameters
 
-    def main():
+def main():
     scaler = load_parameters('pickles/feature_scaler_1215.pkl')
     title_tokenizer = load_parameters('pickles/title_tokenizer_1215.pkl')
     tag_tokenizer = load_parameters('pickles/tag_tokenizer_1215.pkl')
