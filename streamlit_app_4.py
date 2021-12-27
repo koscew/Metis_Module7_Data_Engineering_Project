@@ -205,7 +205,7 @@ def main():
             st.markdown('### Thumbnail B')
             st.image(thumbnail_b)
     elif img_a != None:
-        st.image(img_a)
+        st.image(Image.open(img_a))
 
     #predict
     #baseline = model.predict([blank_image, test_fea, np.zeros((1,maxlen_title)), np.zeros((1,maxlen_tag)), np.zeros((1,maxlen_des))])[0][0]
