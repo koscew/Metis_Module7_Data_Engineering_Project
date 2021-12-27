@@ -48,7 +48,7 @@ def main():
     maxlen_des = 765
 
     #sidebar
-    st.sidebar.markdown('# YouTube Video Information Evaluation System')
+    st.sidebar.markdown('# YouTube Video Information Evaluation Web App')
     st.sidebar.markdown('## Video Information')
     st.sidebar.write('1. The duration of your video:')
     duration_cols_1 = st.sidebar.columns(2)
