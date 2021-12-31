@@ -8,7 +8,7 @@ This is the seventh project of Metis Data Science Bootcamp. We are gong to use a
 
 ***
 
-[Presentation Slides](final_presentation.pdf)
+[Presentation Slides](final_presentation.pdf) / [Updated Presentation Slides](final_presentation_update.pdf)
 
 [Project Writeup](project_writeup.md)
 
